@@ -44,6 +44,7 @@ export function handlePoolCreated(event: PoolCreated): void {
     bundle.ethPriceUSD = ZERO_BD
     bundle.save()
 
+    // on factory creation, create the inital pools from pre-regenesis
     populateEmptyPools(event)
   }
 
