@@ -4,24 +4,20 @@ import { exponentToBigDecimal, safeDiv } from '../utils/index'
 import { Bundle, Pool, Token } from './../types/schema'
 import { ONE_BD, ZERO_BD, ZERO_BI } from './constants'
 
-// todo: use a wmatic pool? check which has more liq first
+const WMATIC_ADDRESS = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
+const USDC_WMATIC_05_POOL = '0xa374094527e1673a86de625aa59517c5de346d32'
+
 const WETH_ADDRESS = '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619'
-const USDC_WETH_03_POOL = '0x0e44ceb592acfc5d3f09d996302eb4c499ff8c10'
 
 const USDC_ADDRESS = '0x2791bca1f2de4661ed88a30c99a7a9449aa84174'
 const DAI_ADDRESS = '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063'
 
 // token where amounts should contribute to tracked volume and liquidity
 // usually tokens that many tokens are paired with
-export const WHITELIST_TOKENS: string[] = [
-  WETH_ADDRESS,
-  USDC_ADDRESS,
-  DAI_ADDRESS,
-  '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270' // WMATIC
-]
+export const WHITELIST_TOKENS: string[] = [WMATIC_ADDRESS, WETH_ADDRESS, USDC_ADDRESS, DAI_ADDRESS]
 
 const STABLE_COINS: string[] = [USDC_ADDRESS, DAI_ADDRESS]
-const MINIMUM_ETH_LOCKED = BigDecimal.fromString('5')
+const MINIMUM_ETH_LOCKED = BigDecimal.fromString('20000')
 
 const Q192 = BigInt.fromI32(2).pow(192 as u8)
 export function sqrtPriceX96ToTokenPrices(sqrtPriceX96: BigInt, token0: Token, token1: Token): BigDecimal[] {
@@ -38,9 +34,9 @@ export function sqrtPriceX96ToTokenPrices(sqrtPriceX96: BigInt, token0: Token, t
 
 export function getEthPriceInUSD(): BigDecimal {
   // fetch eth prices for each stablecoin
-  const usdcPool = Pool.load(USDC_WETH_03_POOL) // usdc is token 0
+  const usdcPool = Pool.load(USDC_WMATIC_05_POOL) // usdc is token1
   if (usdcPool !== null) {
-    return usdcPool.token0Price
+    return usdcPool.token1Price
   } else {
     return ZERO_BD
   }
@@ -51,7 +47,7 @@ export function getEthPriceInUSD(): BigDecimal {
  * @todo update to be derived ETH (add stablecoin estimates)
  **/
 export function findEthPerToken(token: Token): BigDecimal {
-  if (token.id == WAVAX_ADDRESS) {
+  if (token.id == WMATIC_ADDRESS) {
     return ONE_BD
   }
   const whiteList = token.whitelistPools
