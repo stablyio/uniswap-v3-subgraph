@@ -1,6 +1,6 @@
 specVersion: 0.0.4
 description: Uniswap is a decentralized protocol for automated token exchange on Ethereum.
-repository: https://github.com/Uniswap/uniswap-v3-subgraph
+repository: https://github.com/stablyio/uniswap-v3-subgraph
 schema:
   file: ./schema.graphql
 features:
@@ -9,7 +9,7 @@ features:
 dataSources:
   - kind: ethereum/contract
     name: Factory
-    network: frax-testnet
+    network: mainnet:https://rpc.testnet.frax.com
     source:
       address: '0xdFAEEdcf4056bE588EA3574Fb1a59C2CEC8Af84B'
       abi: Factory
@@ -39,7 +39,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: Pool
-    network: frax-testnet
+    network: mainnet:https://rpc.testnet.frax.com
     source:
       abi: Pool
     mapping:
