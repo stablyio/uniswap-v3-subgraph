@@ -9,11 +9,11 @@ features:
 dataSources:
   - kind: ethereum/contract
     name: Factory
-    network: mainnet:https://rpc.testnet.frax.com
+    network: frax-testnet
     source:
-      address: '0xdFAEEdcf4056bE588EA3574Fb1a59C2CEC8Af84B'
+      address: '0x2500C5ED080687E897634eBb9FDD93B43b952ea9'
       abi: Factory
-      startBlock: 7157009
+      startBlock: 8185022
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -39,7 +39,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: Pool
-    network: mainnet:https://rpc.testnet.frax.com
+    network: frax-testnet
     source:
       abi: Pool
     mapping:
