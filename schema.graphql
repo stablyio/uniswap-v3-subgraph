@@ -66,6 +66,8 @@ type Token @entity {
   totalValueLockedUSDUntracked: BigDecimal!
   # derived price in ETH
   derivedETH: BigDecimal!
+  # USD price of this token
+  usdPrice: BigDecimal!
   # pools token is in that are white listed for USD pricing
   whitelistPools: [Pool!]!
   # derived fields
@@ -165,6 +167,8 @@ type Tick @entity {
 type Transaction @entity {
   # txn hash
   id: ID!
+  # From address
+  fromAddress: String!
   # block txn was included in
   blockNumber: BigInt!
   # timestamp txn was confirmed
