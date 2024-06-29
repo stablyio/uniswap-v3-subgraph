@@ -18,11 +18,6 @@ export function handleSwap(event: SwapEvent): void {
   const factory = Factory.load(FACTORY_ADDRESS)!
   const pool = Pool.load(event.address.toHexString())!
 
-  // hot fix for bad pricing
-  if (pool.id == '0x9663f2ca0454accad3e094448ea6f77443880454') {
-    return
-  }
-
   const token0 = Token.load(pool.token0)
   const token1 = Token.load(pool.token1)
 
@@ -109,9 +104,7 @@ export function handleSwap(event: SwapEvent): void {
     bundle.ethPriceUSD = getEthPriceInUSD()
     bundle.save()
     token0.derivedETH = findEthPerToken(token0 as Token)
-    token0.usdPrice = token0.derivedETH.times(bundle.ethPriceUSD)
     token1.derivedETH = findEthPerToken(token1 as Token)
-    token1.usdPrice = token1.derivedETH.times(bundle.ethPriceUSD)
 
     /**
      * Things afffected by new USD rates

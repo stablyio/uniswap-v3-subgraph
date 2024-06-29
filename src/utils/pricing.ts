@@ -5,17 +5,18 @@ import { Bundle, Pool, Token } from './../types/schema'
 import { ONE_BD, ZERO_BD, ZERO_BI } from './constants'
 
 const WETH_ADDRESS = '0xfc00000000000000000000000000000000000006'
+// Pool between WETH and DUSD
 const DUSD_WETH_03_POOL = '0x0010f3eb625f7c8b617ce3497cb46da7dd75daa2'
 
 // token where amounts should contribute to tracked volume and liquidity
 // usually tokens that many tokens are paired with s
 export const WHITELIST_TOKENS: string[] = [
   WETH_ADDRESS, // WETH
-  '0x1Cd7bFf2a65fEbF27164603352Ba850E1D53cc5c', // DUSD
+  '0x1cd7bff2a65febf27164603352ba850e1d53cc5c', // DUSD
 ]
 
 const STABLE_COINS: string[] = [
-  '0x1Cd7bFf2a65fEbF27164603352Ba850E1D53cc5c',
+  '0x1cd7bff2a65febf27164603352ba850e1d53cc5c',
 ]
 
 const MINIMUM_ETH_LOCKED = BigDecimal.fromString('60')
@@ -32,7 +33,7 @@ export function sqrtPriceX96ToTokenPrices(sqrtPriceX96: BigInt, token0: Token, t
 
 export function getEthPriceInUSD(): BigDecimal {
   // fetch eth prices for each stablecoin
-  const dusdPool = Pool.load(DUSD_WETH_03_POOL) // dai is token0
+  const dusdPool = Pool.load(DUSD_WETH_03_POOL) // DUSD is token0
   if (dusdPool !== null) {
     return dusdPool.token0Price
   } else {

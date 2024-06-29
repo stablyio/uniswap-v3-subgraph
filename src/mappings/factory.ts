@@ -68,7 +68,6 @@ export function handlePoolCreated(event: PoolCreated): void {
     token0.totalValueLockedUSDUntracked = ZERO_BD
     token0.txCount = ZERO_BI
     token0.poolCount = ZERO_BI
-    token0.usdPrice = ZERO_BD
     token0.whitelistPools = []
   }
 
@@ -94,7 +93,6 @@ export function handlePoolCreated(event: PoolCreated): void {
     token1.totalValueLockedUSDUntracked = ZERO_BD
     token1.txCount = ZERO_BI
     token1.poolCount = ZERO_BI
-    token1.usdPrice = ZERO_BD
     token1.whitelistPools = []
   }
 

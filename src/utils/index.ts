@@ -101,7 +101,6 @@ export function loadTransaction(event: ethereum.Event): Transaction {
   if (transaction === null) {
     transaction = new Transaction(event.transaction.hash.toHexString())
   }
-  transaction.fromAddress = event.address.toHexString()
   transaction.blockNumber = event.block.number
   transaction.timestamp = event.block.timestamp
   transaction.gasUsed = BigInt.zero() //needs to be moved to transaction receipt
