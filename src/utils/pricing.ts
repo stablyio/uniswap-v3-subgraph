@@ -6,7 +6,7 @@ import { ONE_BD, ZERO_BD, ZERO_BI } from './constants'
 
 const WETH_ADDRESS = '0xfc00000000000000000000000000000000000006'
 // Pool between WETH and DUSD
-const DUSD_WETH_03_POOL = '0x0010f3eb625f7c8b617ce3497cb46da7dd75daa2'
+const DUSD_WETH_03_POOL = '0xd90738f5265133b677505e0e018a41f28a94bf07'
 
 // token where amounts should contribute to tracked volume and liquidity
 // usually tokens that many tokens are paired with s
