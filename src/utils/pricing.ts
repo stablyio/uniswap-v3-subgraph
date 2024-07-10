@@ -5,18 +5,19 @@ import { Bundle, Pool, Token } from './../types/schema'
 import { ONE_BD, ZERO_BD, ZERO_BI } from './constants'
 
 const WETH_ADDRESS = '0xfc00000000000000000000000000000000000006'
+const DUSD_ADDRESS = '0x4D6E79013212F10A026A1FB0b926C9Fd0432b96c'
 // Pool between WETH and DUSD
-const DUSD_WETH_03_POOL = '0xd90738f5265133b677505e0e018a41f28a94bf07'
+const DUSD_WETH_03_POOL = '0x9535a8aBAECCf58D17B01890f959Cb0b33BA1CC4'
 
 // token where amounts should contribute to tracked volume and liquidity
 // usually tokens that many tokens are paired with s
 export const WHITELIST_TOKENS: string[] = [
   WETH_ADDRESS, // WETH
-  '0x1cd7bff2a65febf27164603352ba850e1d53cc5c', // DUSD
+  DUSD_ADDRESS,
 ]
 
 const STABLE_COINS: string[] = [
-  '0x1cd7bff2a65febf27164603352ba850e1d53cc5c',
+  DUSD_ADDRESS,
 ]
 
 const MINIMUM_ETH_LOCKED = BigDecimal.fromString('60')

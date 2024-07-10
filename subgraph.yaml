@@ -11,9 +11,9 @@ dataSources:
     name: Factory
     network: frax-testnet
     source:
-      address: '0xc77F6B89d047d335dC1B703d131796338615512c'
+      address: '0xbe820D6Bb6d06fcfB66264c53F77564802307F14'
       abi: Factory
-      startBlock: 9777988
+      startBlock: 10301250
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
