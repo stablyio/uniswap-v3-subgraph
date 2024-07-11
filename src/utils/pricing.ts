@@ -5,9 +5,9 @@ import { Bundle, Pool, Token } from './../types/schema'
 import { ONE_BD, ZERO_BD, ZERO_BI } from './constants'
 
 const WETH_ADDRESS = '0xfc00000000000000000000000000000000000006'
-const DUSD_ADDRESS = '0x4D6E79013212F10A026A1FB0b926C9Fd0432b96c'
+const DUSD_ADDRESS = '0x4d6e79013212f10a026a1fb0b926c9fd0432b96c'
 // Pool between WETH and DUSD
-const DUSD_WETH_03_POOL = '0xD21a70D990B0969864902087DE3453C453236b52'
+const DUSD_WETH_03_POOL = '0xd21a70d990b0969864902087de3453c453236b52'
 
 // token where amounts should contribute to tracked volume and liquidity
 // usually tokens that many tokens are paired with s
