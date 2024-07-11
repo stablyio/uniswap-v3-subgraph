@@ -7,18 +7,16 @@ import { ONE_BD, ZERO_BD, ZERO_BI } from './constants'
 const WETH_ADDRESS = '0xfc00000000000000000000000000000000000006'
 const DUSD_ADDRESS = '0x4D6E79013212F10A026A1FB0b926C9Fd0432b96c'
 // Pool between WETH and DUSD
-const DUSD_WETH_03_POOL = '0x9535a8abaeccf58d17b01890f959cb0b33ba1cc4'
+const DUSD_WETH_03_POOL = '0xD21a70D990B0969864902087DE3453C453236b52'
 
 // token where amounts should contribute to tracked volume and liquidity
 // usually tokens that many tokens are paired with s
 export const WHITELIST_TOKENS: string[] = [
   WETH_ADDRESS, // WETH
-  DUSD_ADDRESS,
+  DUSD_ADDRESS
 ]
 
-const STABLE_COINS: string[] = [
-  DUSD_ADDRESS,
-]
+const STABLE_COINS: string[] = [DUSD_ADDRESS]
 
 const MINIMUM_ETH_LOCKED = BigDecimal.fromString('60')
 
@@ -26,7 +24,10 @@ const Q192 = BigInt.fromI32(2).pow(192 as u8)
 export function sqrtPriceX96ToTokenPrices(sqrtPriceX96: BigInt, token0: Token, token1: Token): BigDecimal[] {
   const num = sqrtPriceX96.times(sqrtPriceX96).toBigDecimal()
   const denom = BigDecimal.fromString(Q192.toString())
-  const price1 = num.div(denom).times(exponentToBigDecimal(token0.decimals)).div(exponentToBigDecimal(token1.decimals))
+  const price1 = num
+    .div(denom)
+    .times(exponentToBigDecimal(token0.decimals))
+    .div(exponentToBigDecimal(token1.decimals))
 
   const price0 = safeDiv(BigDecimal.fromString('1'), price1)
   return [price0, price1]
