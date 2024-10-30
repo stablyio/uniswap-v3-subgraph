@@ -16,7 +16,7 @@ export const WHITELIST_TOKENS: string[] = [
   DUSD_ADDRESS
 ]
 
-const STABLE_COINS: string[] = []
+const STABLE_COINS: string[] = [DUSD_ADDRESS]
 
 const MINIMUM_ETH_LOCKED = BigDecimal.fromString('60')
 

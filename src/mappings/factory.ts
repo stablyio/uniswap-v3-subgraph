@@ -14,6 +14,16 @@ export function handlePoolCreated(event: PoolCreated): void {
     return
   }
 
+  // dUSD/USDe
+  if (event.params.pool == Address.fromHexString('0xff91b186334664a633c3a4f39f153f0b18f0ec66')) {
+    return
+  }
+
+  // sDAI/dUSD
+  if (event.params.pool == Address.fromHexString('0x2aa742e405aa1a11f743ff7c104f5892110bbda3')) {
+    return
+  }
+
   // load factory
   let factory = Factory.load(FACTORY_ADDRESS)
   if (factory === null) {

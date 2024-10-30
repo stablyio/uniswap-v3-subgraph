@@ -1,4 +1,4 @@
-import { BigInt } from '@graphprotocol/graph-ts'
+import { BigInt, log } from '@graphprotocol/graph-ts'
 
 import { Bundle, Factory, Mint, Pool, Tick, Token } from '../../types/schema'
 import { Mint as MintEvent } from '../../types/templates/Pool/Pool'
@@ -9,7 +9,7 @@ import {
   updatePoolHourData,
   updateTokenDayData,
   updateTokenHourData,
-  updateUniswapDayData,
+  updateUniswapDayData
 } from '../../utils/intervalUpdates'
 import { createTick } from '../../utils/tick'
 
@@ -69,6 +69,19 @@ export function handleMint(event: MintEvent): void {
     // reset aggregates with new amounts
     factory.totalValueLockedETH = factory.totalValueLockedETH.plus(pool.totalValueLockedETH)
     factory.totalValueLockedUSD = factory.totalValueLockedETH.times(bundle.ethPriceUSD)
+
+    // log.info('a17_mint: {} {}/{} {} {} {} {} {} {} {} {}', [
+    //   pool.totalValueLockedETH.toString(),
+    //   token0.symbol, token1.symbol,
+    //   factory.totalValueLockedETH.toString(),
+    //   factory.totalValueLockedUSD.toString(),
+    //   event.transaction.hash.toHexString(),
+    //   pool.totalValueLockedToken0.toString(),
+    //   pool.totalValueLockedToken1.toString(),
+    //   token0.derivedETH.toString(),
+    //   token1.derivedETH.toString(),
+    //   bundle.ethPriceUSD.toString()
+    // ])
 
     const transaction = loadTransaction(event)
     const mint = new Mint(transaction.id.toString() + '-' + event.logIndex.toString())

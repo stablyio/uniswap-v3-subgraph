@@ -1,19 +1,54 @@
-import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
+import { BigDecimal, BigInt, log } from '@graphprotocol/graph-ts'
 
 import { Bundle, Factory, Pool, Swap, Token } from '../../types/schema'
 import { Swap as SwapEvent } from '../../types/templates/Pool/Pool'
 import { convertTokenToDecimal, loadTransaction, safeDiv } from '../../utils'
-import { FACTORY_ADDRESS, ONE_BI, ZERO_BD } from '../../utils/constants'
+import { FACTORY_ADDRESS, ONE_BD, ONE_BI, ZERO_BD } from '../../utils/constants'
 import {
   updatePoolDayData,
   updatePoolHourData,
   updateTokenDayData,
   updateTokenHourData,
-  updateUniswapDayData,
+  updateUniswapDayData
 } from '../../utils/intervalUpdates'
 import { findEthPerToken, getEthPriceInUSD, getTrackedAmountUSD, sqrtPriceX96ToTokenPrices } from '../../utils/pricing'
 
+// Unexpected transactions on testnet
+// https://stably-team.slack.com/archives/C06LK2MHNFN/p1722475932213749?thread_ts=1722291829.970009&cid=C06LK2MHNFN
+const UNEXPECTED_TRANSACTIONS_TESTNET = [
+  '0x68b0d3d15b7fdc161072494bc2d306c234ef8e83a8d97ce3b76c157ac756d281',
+  '0x07d02f97368936b7b8830b8bf557d6695fe1a9bb12645f5ead8dc8edb12629bd',
+  '0xc57a2226ecd33047fb138476818b28e40c04df90ac5ae89f59cfaef92c2ac046',
+  '0x303f7f93ae0bb043ff3ae7d5ffd08ad848db1de629d7e53fa90eb611e8a85d88',
+  '0x478c70f3a365c0fb91971c4d9f0885ee1a5781aab0caedbf59274ab8b049c607',
+  '0xe16574f56ab2c60ea66db08f4d8c000837e8e1c57a6c9f43eefa3abd5dca325c',
+  '0x35df933d81877c03dabf497bb7e0f5963407a88de36268d679037dc4c40dda03',
+  '0x6da120fb143ac052f22a09058593485fe96d9572284297ad29d8dde8619b24fa',
+  '0x18da4c95a08eab242f6fc748b0040b66d35a2359a0e09a49265c70a7953fe96d',
+  // '0x56cec1f6f21636b2403fe634f243222636083dcc37d382d1b6f4f58a79163fff',
+  // '0x22aaedcc20665284d6d6d859e3d75e5e902284ba88ed61323606876b28d23258',
+  // '0x86ec4af6479b7aac821eec9b02c05ce6d095bddf01c471b962814e5e22ca09bb',
+  // '0xdb92e612fce4fa123cbc50e885742d0c355f59b2641fc30392f544aa37310373',
+  // '0x03fa1996d2180d40b29783cf023fd32de6b160c1ee75572400d58ae7b4d298c0',
+  // '0xcb5537f7b631a3e6fd421878f6b0d3f482e0b6d3aa0cd76641a5c2e9eb42a441',
+  '0xfe1b8f2c45b7fa8c5e2a175fdaaef592bf9dbfef27e3f8517af839bdbdc7341c'
+]
+
 export function handleSwap(event: SwapEvent): void {
+  // const transactionHash = event.transaction.hash.toHexString()
+  // const notUpdateUSDRate = UNEXPECTED_TRANSACTIONS_TESTNET.includes(transactionHash)
+  // if (UNEXPECTED_TRANSACTIONS_TESTNET.includes(transactionHash)) {
+  //   log.warning('Unexpected transaction on testnet: {}', [transactionHash])
+  //   return
+  // }
+  const contractAddress = event.address.toHexString()
+  const blockNumber = event.block.number.toU64()
+  if (contractAddress == '0xd21a70d990b0969864902087de3453c453236b52') {
+    if (blockNumber > 10378491 && blockNumber < 11198695) {
+      return
+    }
+  }
+
   const bundle = Bundle.load('1')!
   const factory = Factory.load(FACTORY_ADDRESS)!
   const pool = Pool.load(event.address.toHexString())!
@@ -101,14 +136,19 @@ export function handleSwap(event: SwapEvent): void {
     pool.save()
 
     // update USD pricing
-    bundle.ethPriceUSD = getEthPriceInUSD()
-    bundle.save()
+    const ethPriceUSD = getEthPriceInUSD()
+
+    if (ethPriceUSD.gt(ONE_BD)) {
+      bundle.ethPriceUSD = ethPriceUSD
+      bundle.save()
+    }
     token0.derivedETH = findEthPerToken(token0 as Token)
     token1.derivedETH = findEthPerToken(token1 as Token)
 
     /**
-     * Things afffected by new USD rates
+     * Things affected by new USD rates
      */
+
     pool.totalValueLockedETH = pool.totalValueLockedToken0
       .times(token0.derivedETH)
       .plus(pool.totalValueLockedToken1.times(token1.derivedETH))
@@ -119,6 +159,7 @@ export function handleSwap(event: SwapEvent): void {
 
     token0.totalValueLockedUSD = token0.totalValueLocked.times(token0.derivedETH).times(bundle.ethPriceUSD)
     token1.totalValueLockedUSD = token1.totalValueLocked.times(token1.derivedETH).times(bundle.ethPriceUSD)
+  
 
     // create Swap event
     const transaction = loadTransaction(event)

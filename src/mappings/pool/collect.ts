@@ -39,7 +39,7 @@ export function handleCollect(event: CollectEvent): void {
   )
 
   // Reset tvl aggregates until new amounts calculated
-  factory.totalValueLockedETH = factory.totalValueLockedETH.minus(pool.totalValueLockedETH)
+  // factory.totalValueLockedETH = factory.totalValueLockedETH.minus(pool.totalValueLockedETH)
 
   // Update globals
   factory.txCount = factory.txCount.plus(ONE_BI)
@@ -68,8 +68,8 @@ export function handleCollect(event: CollectEvent): void {
   pool.collectedFeesUSD = pool.collectedFeesUSD.plus(trackedCollectedAmountUSD)
 
   // reset aggregates with new amounts
-  factory.totalValueLockedETH = factory.totalValueLockedETH.plus(pool.totalValueLockedETH)
-  factory.totalValueLockedUSD = factory.totalValueLockedETH.times(bundle.ethPriceUSD)
+  // factory.totalValueLockedETH = factory.totalValueLockedETH.plus(pool.totalValueLockedETH)
+  // factory.totalValueLockedUSD = factory.totalValueLockedETH.times(bundle.ethPriceUSD)
 
   const collect = new Collect(transaction.id + '-' + event.logIndex.toString())
   collect.transaction = transaction.id
